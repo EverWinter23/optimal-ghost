@@ -17,7 +17,6 @@ def main():
         if ans == 'y':continue
         else: break
 
-
 class OptimalGhost:
     def __init__(self, file_name):
         self.trie = Trie()
@@ -61,22 +60,23 @@ class OptimalGhost:
         odd_words = [word for word in choice_words if len(word) % 2 == 1]
         even_words = [word for word in choice_words if len(word) % 2 == 0]
         
-        if len(odd_words) >= 1:
-            bot_word = random.choice(odd_words)
-        elif len(even_words) >= 1:
-            even_words.sort(key = len, reverse=True)
-            bot_word = even_words[0]
+        letter = self.trie.forced_win(word)
+        if letter == -1:
+            print('Not opti')
+            if len(odd_words) >= 1:
+                bot_word = random.choice(odd_words)
+            elif len(even_words) >= 1:
+                even_words.sort(key = len, reverse=True)
+                bot_word = even_words[0]
+            else:
+                bot_word = random.choice(string.ascii_lowercase)
+            
+            if len(bot_word) > 1:
+                letter = bot_word[turn]
+        
         else:
-            bot_word = random.choice(string.ascii_lowercase)
-        
-        if len(bot_word) > 1:
-            print(bot_word, turn)
-            letter = bot_word[turn]
-        else:
-            letter = bot_word 
-        
-        print('bot is building towards [{}]'.format(bot_word))
-        
+            letter = chr(letter + ord('a'))
+
         return letter
         
     def load_words(self, file_name):
