@@ -104,6 +104,28 @@ class Trie:
 
         i = self._to_index(query[d])
         return self.search(x.next[i], query, d + 1, lim)
+    
+    def forced_win(self, prefix):
+        branch = self.get_branch(self.root, prefix, 0)
+        letter = self.forced_win_util(branch)
+        return letter
+
+    def forced_win_util(self, x):
+        winnning_child = -1
+        for idx, child in enumerate(x.next):
+            if child is not None and child.val is None:
+                winnning_child = idx
+                for grand_child in child.next:
+                    if grand_child is not None and\
+                        not (grand_child.val is not None
+                             or self.forced_win_util(grand_child) != -1):
+                        winnning_child = -1
+                        break
+                
+                if winnning_child != -1:
+                    break
+
+        return winnning_child
 
 def main():
     passage = 'she sells sea shells by the'
